@@ -76,6 +76,7 @@ int main() {
   for (int i = 0; i < num_algo; ++i) {
     printf(",%s", algo_names[i]);
   }
+  putchar('\n');
 
   for (int i = 0; i < num_test; ++i) {
     int size = sizes[i];
