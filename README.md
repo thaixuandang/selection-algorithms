@@ -8,7 +8,7 @@ g++ src/*.cpp -O2 -o build/benchmark && build/benchmark > results.csv
 ```
 or make the median of medians algorithm faster with:
 ```bash
-g++ src/*.cpp -O2 -o build/benchmark && build/benchmark > results.csv -DFAST
+g++ src/*.cpp -O2 -DFAST -o build/benchmark && build/benchmark > results.csv
 ```
 
 ## Results
