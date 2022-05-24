@@ -6,6 +6,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <random>
 #include <algorithm>
 #include <cassert>
@@ -15,9 +16,9 @@
 #include "median_of_medians.h"
 
 
-const int num_test = 12;
+const int num_test = 14;
 const int num_algo = 4;
-const int max_size = 10000000;
+const int max_size = 100000000;
 
 const int sizes[] = {
     50,
@@ -31,7 +32,9 @@ const int sizes[] = {
     500000,
     1000000,
     5000000,
-    10000000};
+    10000000,
+    50000000,
+    100000000};
 
 int (*const algorithms[])(int*, int, int) = {
     Naive::select<int>,
@@ -51,6 +54,12 @@ std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
 int a[max_size];
 
 int test(int (*algo)(int*, int, int), int size, int k, const char* algo_name) {
+  if (size > 1000000 && strcmp(algo_name, "Selection sort") == 0) {
+    printf(",so long");
+    fprintf(stderr, "Running %17s in so long.\n", algo_name);
+    return Naive::select(a, size, k);
+  }
+
   time_t start = clock();
   int res = algo(a, size, k);
   time_t end = clock();
