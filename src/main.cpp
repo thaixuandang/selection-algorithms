@@ -71,7 +71,44 @@ int test(int (*algo)(int*, int, int), int size, int k, const char* algo_name) {
   return res;
 }
 
+#include "qs_rand_pivot.h"
+#include "qs_median_pivot.h"
+
+int b[max_size];
+
+void test_quicksort(void (*algo)(int*, int), int a[], int size, const char* algo_name) {
+  time_t start = clock();
+  algo(a, size);
+  time_t end = clock();
+  int runtime = (end - start) / (CLOCKS_PER_SEC / 1000);
+
+  printf(",%d", runtime);
+  fprintf(stderr, "Running %s in %7d milliseconds.\n", algo_name, runtime);
+}
+
+void quicksort_benchmark() {
+  freopen("results_quicksort.csv", "w", stdout);
+  puts("Size,Quicksort (random pivot),Quicksort (median pivot)");
+  for (int i = 0; i < num_test; ++i) {
+    int size = sizes[i];
+    std::generate(a, a + size, rng);
+    memcpy(b, a, sizeof(a));
+
+    printf("%d", size);
+    fprintf(stderr, "Size: %d\n", size);
+
+    test_quicksort(QuicksortRandomPivot::quicksort<int>, a, size, "Quicksort (random pivot)");
+    assert(std::is_sorted(a, a + size));
+    test_quicksort(QuicksortMedianPivot::quicksort<int>, b, size, "Quicksort (median pivot)");
+    assert(std::is_sorted(b, b + size));
+
+    putchar('\n');
+    fprintf(stderr, "\n");
+  }
+}
+
 int main() {
+  freopen("results.csv", "w", stdout);
   printf("Size");
   for (int i = 0; i < num_algo; ++i) {
     printf(",%s", algo_names[i]);
@@ -99,5 +136,8 @@ int main() {
     std::sort(answers, answers + num_algo);
     assert(answers[0] == answers[num_algo - 1]);
   }
+
+
+  quicksort_benchmark();
   return 0;
 }
