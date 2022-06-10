@@ -37,12 +37,13 @@ namespace MedianOfMedians {
 
     T pivot = select(a, groups, groups / 2);
     int count_less = 0, count_equal = 0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) {
       if (a[i] < pivot) {
         count_less++;
       } else if (a[i] == pivot) {
         count_equal++;
       }
+    }
 
     if (count_less < k && k <= count_less + count_equal) {
       return pivot;
